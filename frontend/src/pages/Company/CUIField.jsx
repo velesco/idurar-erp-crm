@@ -46,6 +46,18 @@ const CUIField = (props) => {
           
           // Show success message
           message.success(`Company found: ${data.nume_companie}`);
+          
+          // Update other fields with data.date_genarele
+          if (data.date_genarele) {
+            Object.keys(data.date_genarele).forEach((key) => {
+              const input = formRef.current.querySelector(`input[name="${key}"]`);
+              if (input) {
+                input.value = data.date_genarele[key];
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            });
+          }
         } else {
           console.log('No company data found for CUI:', cuiValue);
         }
