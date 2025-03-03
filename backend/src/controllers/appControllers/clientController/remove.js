@@ -6,11 +6,9 @@ const People = mongoose.model('People');
 const Company = mongoose.model('Company');
 
 const remove = async (Model, req, res) => {
-  // cannot delete client it it have one invoice or quotes:
-  // check if client have invoice or quotes:
   const { id } = req.params;
 
-  // first find if there alt least one quote or invoice exist corresponding to the client
+  // Check if client has any quotes or invoices
   const resultQuotes = QuoteModel.findOne({
     client: id,
     removed: false,
@@ -20,22 +18,28 @@ const remove = async (Model, req, res) => {
     removed: false,
   }).exec();
 
-  const [quotes, invoice] = await Promise.allSettled([resultQuotes, resultInvoice]);
+  // Run both queries concurrently
+  const results = await Promise.all([resultQuotes, resultInvoice]);
+  const [quotes, invoice] = results;
+  
+  // Check if any quotes or invoices exist for this client
   if (quotes) {
     return res.status(400).json({
       success: false,
       result: null,
-      message: 'Cannot delete client if client have any quote  or invoice',
+      message: 'Cannot delete client if client has any quote or invoice',
     });
   }
+  
   if (invoice) {
     return res.status(400).json({
       success: false,
       result: null,
-      message: 'Cannot delete client if client have any quote or invoice',
+      message: 'Cannot delete client if client has any quote or invoice',
     });
   }
 
+  // If no quotes or invoices, proceed with deletion
   let result = await Model.findOneAndDelete({
     _id: id,
     removed: false,
@@ -49,6 +53,7 @@ const remove = async (Model, req, res) => {
     });
   }
 
+  // Update related models based on client type
   if (result.type === 'people') {
     await People.findOneAndUpdate(
       {
@@ -81,4 +86,5 @@ const remove = async (Model, req, res) => {
     message: 'Successfully Deleted the client by id: ' + id,
   });
 };
+
 module.exports = remove;

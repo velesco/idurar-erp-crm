@@ -130,8 +130,6 @@ export default function HeaderContent() {
 
       {/* <AppsButton /> */}
 
-      <UpgradeButton />
-
       <SelectLanguage />
 
       {location.pathname === '/' && <ChooseCurrency />}

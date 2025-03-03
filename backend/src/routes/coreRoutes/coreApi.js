@@ -60,16 +60,14 @@ router
 router
   .route('/setting/listBySettingKey')
   .get(hasPermission('read'), catchErrors(settingController.listBySettingKey));
-router
+router  
   .route('/setting/updateBySettingKey/:settingKey?')
   .patch(hasPermission(), catchErrors(settingController.updateBySettingKey));
 router
   .route('/setting/upload/:settingKey?')
   .patch(
     hasPermission(),
-    catchErrors(
-      singleStorageUpload({ entity: 'setting', fieldName: 'settingValue', fileType: 'image' })
-    ),
+    singleStorageUpload({ entity: 'setting', fieldName: 'settingValue', fileType: 'image' }),
     catchErrors(settingController.updateBySettingKey)
   );
 router
