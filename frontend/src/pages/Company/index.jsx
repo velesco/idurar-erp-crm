@@ -1,6 +1,7 @@
 import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
 import { fields } from './config';
+import CUIField from './CUIField';
 
 import useLanguage from '@/locale/useLanguage';
 

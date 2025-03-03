@@ -211,6 +211,10 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  CUI: {
+    type: String,
+    trim: true,
+  },
 });
 
 schema.plugin(require('mongoose-autopopulate'));

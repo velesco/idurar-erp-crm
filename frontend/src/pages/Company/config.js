@@ -28,6 +28,10 @@ export const fields = {
   website: {
     type: 'url',
   },
+  CUI: {
+    type: 'string',
+    required: true,
+  },
   // legalName: {
   //   type: 'string',
   //   required: true,
